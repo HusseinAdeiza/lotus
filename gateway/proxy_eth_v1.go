@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"strings"
 	"sync"
 
 	"github.com/ipfs/go-cid"
@@ -287,6 +288,11 @@ func (pv1 *reverseProxyV1) EthMaxPriorityFeePerGas(ctx context.Context) (ethtype
 func (pv1 *reverseProxyV1) EthEstimateGas(ctx context.Context, jparams jsonrpc.RawParams) (ethtypes.EthUint64, error) {
 	params, err := jsonrpc.DecodeParams[ethtypes.EthEstimateGasParams](jparams)
 	if err != nil {
+		// Negative hex quantities (e.g., "0x-1") are now rejected by the parser.
+		// Translate to ErrInvalidParams with the user-friendly eth_estimateGas message.
+		if strings.Contains(err.Error(), "cannot parse") {
+			return ethtypes.EthUint64(0), api.NewErrNegativeGasPrice()
+		}
 		return ethtypes.EthUint64(0), xerrors.Errorf("decoding params: %w", err)
 	}
 
