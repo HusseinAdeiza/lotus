@@ -425,12 +425,6 @@ Note: one only needs to update `filecoin-ffi`'s dependency on `go-state-types` w
 
 13. Run `make docsgen-cli`.
 
-    On macOS, if local commands that link filecoin-ffi fail to find Homebrew libraries such as `hwloc`, prefix the command with:
-
-    ```bash
-    CGO_LDFLAGS="-L/opt/homebrew/lib"
-    ```
-
 14. Validate the network skeleton on a devnet by:
   - Have a local developer network that starts at the current network version.  See docs at https://docs.filecoin.io/networks/local-testnet .  
   - Be able to see the Actor CIDs/Actor version for the mock Actor-bundle through `lotus state actor-cids --network-version XX+1`
@@ -441,8 +435,6 @@ Note: one only needs to update `filecoin-ffi`'s dependency on `go-state-types` w
 15. Post a PR with the changes and include the local devnet output.
    - [nv24 example](https://github.com/filecoin-project/lotus/pull/12455)
    - [nv27 example](https://github.com/filecoin-project/lotus/pull/13125)
-
-    If the skeleton PR changes Go files, `go.mod`, or `go.sum` but does not need a user-facing changelog entry, add `[skip changelog]` to the PR body or apply the `skip/changelog` label before moving it out of draft. Otherwise the changelog workflow will fail.
 
 And you're done 🎉! This creates a basis where you can start testing new FIPs. 
 
